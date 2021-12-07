@@ -104,33 +104,26 @@ def main():
 	out.write('AUC ROC new based on threshold: %s\n\n'%roc_auc_score(y_new,pre_new))
 	out.write('AUC ROC new based on prediction: %s\n\n'%roc_auc_score(y_new,pred_new))
 	out.write('Confusion matrix based on threshold: \n\n')
-	out.write('\t\t1\t0\n')
-	out.write('\t1\t%s\t%s\n'%(CM_based_on_threshold[1,1],CM_based_on_threshold[1,0]))
-	out.write('\t0\t%s\t%s\n'%(CM_based_on_threshold[0,1],CM_based_on_threshold[0,0]))
+	out.write('\t\tPositive\tNegative\n')
+	out.write('\tPositive\t%s\t%s\n'%(CM_based_on_threshold[1,1],CM_based_on_threshold[1,0]))
+	out.write('\tNegative\t%s\t%s\n'%(CM_based_on_threshold[0,1],CM_based_on_threshold[0,0]))
 	out.write('Confusion matrix based on prediction: \n\n')
-	out.write('\t\t1\t0\n')
-	out.write('\t1\t%s\t%s\n'%(CM[1,1],CM[1,0]))
-	out.write('\t0\t%s\t%s\n'%(CM[0,1],CM[0,0]))
+	out.write('\t\tPositive\tNegative\n')
+	out.write('\tPositive\t%s\t%s\n'%(CM[1,1],CM[1,0]))
+	out.write('\tNegative\t%s\t%s\n'%(CM[0,1],CM[0,0]))
 	out.close()
 
 	pred = y_new.copy()
 	pred = pd.DataFrame(pred)
-	pre_new = pd.DataFrame(pre_new)
+	pre_new = pd.DataFrame(pre_new) # prediction based on threshold
 	pre_new.index = pred.index
 	pred = pd.concat([pred,pre_new],axis=1)
-	pre_new = pd.DataFrame(pre_new)
-	pre_new.index = pred.index
-	pred = pd.concat([pred,pre_new],axis=1)
-	pred.to_csv(args.save_file + '_prediction_based_on_threshold.txt', index=True, header=True,sep="\t")
-
-	pred = y_new.copy()
-	pred = pd.DataFrame(pred)
-	pred_new = pd.DataFrame(pred_new)
+	pred_new = pd.DataFrame(pred_new) # prediction given by the model, i.e., threhold at 0.5
 	pred_new.index = pred.index
 	pred = pd.concat([pred,pred_new],axis=1)
-	pred_new = pd.DataFrame(pred_new)
-	pred_new.index = pred.index
-	pred = pd.concat([pred,pred_new],axis=1)
+	prob_new.index = pred.index # probability of a given gene to be predicted as 1 or 0
+	pred = pd.concat([pred,prob_new],axis=1)
+	pred.columns = ['Class','Prediction_based_on_threshold_%s'%args.threshold,'Prediction_based_on_0.5','Probability_of_being_predicted_as_negative','Probability_of_being_predicted_as_positive']
 	pred.to_csv(args.save_file + '_prediction.txt', index=True, header=True,sep="\t")
 
 

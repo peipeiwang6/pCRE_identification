@@ -226,7 +226,7 @@ def main():
 	
 	# RandomForestClassifer
 	print('Begin to train the model')
-	os.system('python /mnt/home/peipeiw/Documents/Transformer_Switchgrass/02_MotifDiscovery/13_RF_holdout_before_enrichment_draw_two_AUC_SMOTE_upsampling_val_02.py -file train_enriched_kmers_matrix.txt -cv_num %s -score %s -smote %s'%(args.cv_num, args.score,args.smote))
+	os.system('python /mnt/home/peipeiw/Documents/Transformer_Switchgrass/02_MotifDiscovery/13_RF_holdout_before_enrichment_draw_two_AUC_SMOTE_upsampling_val_02_feature_selection.py -file train_enriched_kmers_matrix.txt -cv_num %s -score %s -smote %s'%(args.cv_num, args.score,args.smote))
 	
 	# get the best threshold
 	inp = open('train_enriched_kmers_matrix.txt_RF_cv%s_score_%s_%s'%(args.cv_num, args.score,args.smote),'r')
@@ -236,7 +236,7 @@ def main():
 	
 	# apply the model on test
 	print('Begin to apply the model on test')
-	os.system('python /mnt/home/peipeiw/Documents/Transformer_Switchgrass/02_MotifDiscovery/09_apply_model_to_new_data_draw_two_AUC_SMOTE_on_test.py -model train_enriched_kmers_matrix.txt_RF_cv%s_score_%s_%s.pkl -new_file test_enriched_kmers_matrix.txt -threshold %s -save_file train_enriched_kmers_applied_on_test_threshold -smote %s'%(args.cv_num, args.score,args.smote,threshold,args.smote_test))
+	os.system('python /mnt/home/peipeiw/Documents/Transformer_Switchgrass/02_MotifDiscovery/09_apply_model_to_new_data_draw_two_AUC_SMOTE_on_test_prediction_score.py -model train_enriched_kmers_matrix.txt_RF_cv%s_score_%s_%s.pkl -new_file test_enriched_kmers_matrix.txt -threshold %s -save_file train_enriched_kmers_applied_on_test_threshold -smote %s'%(args.cv_num, args.score,args.smote,threshold,args.smote_test))
 	
 	print('Done!')
 
